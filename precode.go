@@ -67,7 +67,8 @@ func TestMainHandlerWhenCountMoreThanTotal(t *testing.T) {
 	require.NotEmpty(t, body)
 
 	cafeSity := "moscow"
-	require.Equal(t, cafeSity, cafeList)
+	city := req.URL.Query().Get("city")
+	require.Equal(t, cafeSity, city)
 
 	list := strings.Split(body, ",")
 	assert.Len(t, list, totalCount)
