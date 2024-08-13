@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -29,7 +28,6 @@ func TestMainHandlerWhenNoEmpty(t *testing.T) {
 
 // тест на запрос города которого нет в списке
 func TestMainHandlerWhenCity(t *testing.T) {
-	
 
 	req := httptest.NewRequest("GET", "/cafe?count=4&city=tula", nil)
 
@@ -37,10 +35,11 @@ func TestMainHandlerWhenCity(t *testing.T) {
 	handler := http.HandlerFunc(mainHandle)
 	handler.ServeHTTP(responseRecorder, req)
 
-	city := req.URL.Query().Get("city")
-	cafe := cafeList[city]
-	fmt.Println(cafe)
-	assert.NotEmpty(t, cafe, "wrong city value")
+	status := responseRecorder.Code
+	assert.Equal(t, status, http.StatusBadRequest)
+
+	body := responseRecorder.Body.String()
+	assert.Equal(t, body, "wrong city value")
 }
 
 // тест на запрос показ пяти кафе при имеющихся четырёх
